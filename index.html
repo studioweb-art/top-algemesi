@@ -45,6 +45,9 @@
   .revs { border-top:1px solid #eee; padding-top:6px; }
   .revs .rev { font-size:13px; background:#f7f7f7; border-radius:6px; padding:8px 10px; margin:6px 0; }
   .revs .rev b { display:block; font-size:12px; }
+  .revform { display:flex; flex-direction:column; gap:6px; margin-top:6px; }
+  .revform input, .revform select, .revform textarea { padding:9px; border:1px solid #ddd; border-radius:6px; font-size:14px; font-family:inherit; }
+  .revform button { background:#222; color:#fff; padding:10px; border-radius:6px; font-weight:700; cursor:pointer; border:none; }
   .social { display:flex; gap:8px; margin-top:6px; }
   .social a { width:32px; height:32px; border-radius:50%; background:#f0f0f0; display:flex; align-items:center; justify-content:center; }
   .social svg { width:16px; height:16px; fill:#555; }
@@ -73,7 +76,7 @@
 </div>
 
 <div class="wrap">
-  <p class="count" id="count"></p>
+  <div class="toolbar"><span class="count" id="count"></span><select id="orden"><option value="nombre">Nombre A-Z</option><option value="mas">Más valorados</option><option value="menos">Menos valorados</option><option value="ops">Más opiniones</option></select></div>
   <div class="chips" id="chips">
     <button data-t="todos" class="on">Todo</button>
     <button data-t="comer">🍽️ Comer</button>
@@ -153,8 +156,16 @@ function render(){
     return '<div class="card' + (dest?" dest":"") + '"><div class="pic">' + icoDe(s) + '<img src="' + picDe(s) + '" alt="" loading="lazy" onerror="this.remove()"><span class="pbadge">' + esc(s.tipo) + '</span></div>'
     + '<div class="body"><h2>' + esc(s.n) + '</h2>' + (dest?'<span class="star">⭐ Destacado</span>':"")
     + (s.dir?'<div class="meta">📍 ' + esc(s.dir) + ', Algemesí</div>':"")
-    + '<div class="meta"><a style="color:#7cb342;" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(s.n + (s.dir?", "+s.dir:"") + ", Algemesí") + '">🧭 Cómo llegar</a> · <a style="color:#7cb342;" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent("Mira " + s.n + " en Guía Algemesí: https://studioweb-art.github.io/top-algemesi/") + '">🔗 Compartir</a></div>'
-    + '<div class="actions">' + (s.tel?'<a class="b-call" href="' + telHref(s.tel) + '">📞 Llamar</a>':'<a class="b-call" href="#contacto">✏️ ¿Es tu negocio?</a>') + '</div>'
+    + '<div class="meta"><a style="color:#7cb342;" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(s.n + (s.dir?", "+s.dir:"") + ", Algemesí") + '">🧭 Cómo llegar</a></div>'
+    + '<div class="ops">' + (revs.length ? starGlyph(avg(s)) + " " + avg(s).toFixed(1) + " · 💬 " + revs.length : "Nuevo · ¡sé el primero en opinar!") + ' · <a style="color:#7cb342;" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent("Mira " + s.n + " en Guía Algemesí: https://studioweb-art.github.io/top-algemesi/") + '">🔗 Compartir</a></div>' + socialRow(s)
+    + '<div class="actions">' + (s.tel?'<a class="b-call" href="' + telHref(s.tel) + '">📞 Llamar</a>':'<a class="b-call" href="#contacto">✏️ ¿Es tu negocio?</a>')
+    + '<button class="b-op" onclick="document.getElementById(\'f_' + qn + '\').scrollIntoView({behavior:\'smooth\',block:\'center\'})">✍️ Opinar</button></div>'
+    + '<div class="revs">' + revs.map(v=>'<div class="rev"><b>' + esc(v.n) + ' · ' + (v.s ? "★".repeat(v.s) : "☆ (0)") + '</b>' + esc(v.t) + '</div>').join("") + '</div>'
+    + '<div class="revform" id="f_' + qn + '">'
+    + '<input id="n_' + qn + '" placeholder="Tu nombre">'
+    + '<select id="s_' + qn + '"><option value="5">★★★★★ (5)</option><option value="4">★★★★ (4)</option><option value="3">★★★ (3)</option><option value="2">★★ (2)</option><option value="1">★ (1)</option><option value="0">☆ (0)</option></select>'
+    + '<textarea id="t_' + qn + '" rows="2" placeholder="¿Qué te pareció?"></textarea>'
+    + '<button onclick="opinar(\'' + qn + '\')">Publicar opinión</button>'
     + '</div></div></div>';
   }).join("");
 }
@@ -169,6 +180,7 @@ function opinar(id){
   render();
 }
 document.getElementById("q").addEventListener("input", render);
+document.getElementById("orden").addEventListener("change", e => { o = e.target.value; render(); });
 document.querySelectorAll("#chips button").forEach(b => b.addEventListener("click", () => {
   document.querySelectorAll("#chips button").forEach(x => x.classList.remove("on"));
   b.classList.add("on"); f = b.dataset.t; render();
