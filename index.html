@@ -160,10 +160,10 @@ function render(){
     + '<div class="ops">' + (revs.length ? starGlyph(avg(s)) + " " + avg(s).toFixed(1) + " · 💬 " + revs.length : "Nuevo · ¡sé el primero en opinar!") + ' · <a style="color:#7cb342;" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent("Mira " + s.n + " en Guía Algemesí: https://studioweb-art.github.io/top-algemesi/") + '">🔗 Compartir</a></div>' + socialRow(s)
     + '<div class="actions">' + (s.tel?'<a class="b-call" href="' + telHref(s.tel) + '">📞 Llamar</a>':'<a class="b-call" href="#contacto">✏️ ¿Es tu negocio?</a>')
     + '<button class="b-op" onclick="document.getElementById(\'f_' + qn + '\').scrollIntoView({behavior:\'smooth\',block:\'center\'})">✍️ Opinar</button></div>'
-    + '<div class="revs">' + revs.map(v=>'<div class="rev"><b>' + esc(v.n) + ' · ' + "★".repeat(v.s) + '</b>' + esc(v.t) + '</div>').join("") + '</div>'
+    + '<div class="revs">' + revs.map(v=>'<div class="rev"><b>' + esc(v.n) + ' · ' + (v.s ? "★".repeat(v.s) : "☆ (0)") + '</b>' + esc(v.t) + '</div>').join("") + '</div>'
     + '<div class="revform" id="f_' + qn + '">'
     + '<input id="n_' + qn + '" placeholder="Tu nombre">'
-    + '<select id="s_' + qn + '"><option value="5">★★★★★ (5)</option><option value="4">★★★★ (4)</option><option value="3">★★★ (3)</option><option value="2">★★ (2)</option><option value="1">★ (1)</option></select>'
+    + '<select id="s_' + qn + '"><option value="5">★★★★★ (5)</option><option value="4">★★★★ (4)</option><option value="3">★★★ (3)</option><option value="2">★★ (2)</option><option value="1">★ (1)</option><option value="0">☆ (0)</option></select>'
     + '<textarea id="t_' + qn + '" rows="2" placeholder="¿Qué te pareció?"></textarea>'
     + '<button onclick="opinar(\'' + qn + '\')">Publicar opinión</button>'
     + '</div></div></div>';
