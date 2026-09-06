@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Guía Algemesí: todos los bares, oficios, tiendas y servicios del pueblo con opiniones, direcciones y teléfonos.">
 <title>Guía Algemesí · Todos los negocios del pueblo</title>
 <style>
   * { box-sizing:border-box; margin:0; padding:0; }
@@ -22,6 +23,7 @@
   .card { background:#fff; border-radius:14px; padding:14px 16px; margin-bottom:10px; box-shadow:0 2px 8px rgba(0,0,0,.08); }
   .card.dest { border:2px solid #e0a458; }
   .card h2 { font-size:18px; }
+  .card .ico { font-size:24px; margin-right:6px; }
   .card .tipo { font-size:12px; color:#fff; background:#6b4423; border-radius:10px; padding:2px 9px; display:inline-block; margin:5px 0; }
   .card .star { font-size:12px; background:#e0a458; color:#1a100b; border-radius:10px; padding:2px 9px; display:inline-block; margin:5px 0 5px 4px; font-weight:bold; }
   .meta { font-size:13px; color:#666; margin:2px 0; }
@@ -91,6 +93,8 @@ const CATMAP = {"Restaurante":"comer","Bar":"comer","Cafetería":"comer","Comida
 "Libros":"cultura","Papelería":"cultura","Lotería":"cultura","Apuestas":"cultura",
 "Agencia de viajes":"viajes","Fotógrafo":"foto","Veterinario":"vete","Floristería":"flor","Deporte":"deporte"};
 function catDe(s){ return CATMAP[s.tipo] || "serv"; }
+const ICOMAP = {"comer":"🍽️","pelo":"💇","taller":"🔧","farmacia":"💊","clinica":"⚕️","supers":"🛒","moda":"👗","tecno":"📱","optica":"👓","tatu":"🎨","hogar":"🏠","cultura":"📚","viajes":"✈️","foto":"📸","vete":"🐾","flor":"🌸","serv":"🛠️","deporte":"🏋️"};
+function icoDe(s){ return ICOMAP[catDe(s)] || "🏪"; }
 function render(){
   const q = document.getElementById("q").value.toLowerCase();
   let r = S.filter(s => (f==="todos" || catDe(s)===f) && (s.n.toLowerCase().includes(q) || s.tipo.toLowerCase().includes(q)));
@@ -98,10 +102,10 @@ function render(){
   document.getElementById("count").textContent = r.length + " negocios";
   document.getElementById("list").innerHTML = r.map(s => {
     const id = s.n; const revs = getRevs(id); const dest = FEAT.includes(s.n);
-    return `<div class="card${dest?" dest":""}"><h2>${esc(s.n)}</h2><span class="tipo">${esc(s.tipo)}</span>${dest?`<span class="star">⭐ Destacado</span>`:""}
+    return `<div class="card${dest?" dest":""}"><h2><span class="ico">${icoDe(s)}</span>${esc(s.n)}</h2><span class="tipo">${esc(s.tipo)}</span>${dest?`<span class="star">⭐ Destacado</span>`:""}
     ${s.dir?`<div class="meta">📍 ${esc(s.dir)}, Algemesí</div>`:""}
     <div class="ops">${revs.length ? "💬 " + revs.length + " opiniones" : "Nuevo · ¡sé el primero en opinar!"}</div>
-    <div class="actions">${s.tel?`<a class="b-call" href="${telHref(s.tel)}">📞 ${esc(s.tel)}</a>`:""}
+    <div class="actions">${s.tel?`<a class="b-call" href="${telHref(s.tel)}">📞 Llamar</a>`:`<a class="b-call" href="https://wa.me/34655165155?text=${encodeURIComponent("Hola, soy del negocio " + s.n + " y quiero completar mis datos")}">✏️ ¿Es tu negocio?</a>`}
     <button class="b-op" onclick="document.getElementById('f_${esc(s.n)}').scrollIntoView({behavior:'smooth',block:'center'})">✍️ Opinar</button></div>
     <div class="revs">${revs.map((v,idx)=>`<div class="rev"><b>${esc(v.n)} · ${"★".repeat(v.s)}</b>${esc(v.t)}</div>`).join("")}</div>
     <div class="revform" id="f_${esc(s.n)}">
