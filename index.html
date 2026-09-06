@@ -22,6 +22,8 @@
   .hero input { width:100%; max-width:520px; padding:13px 20px; border-radius:30px; border:none; font-size:15px; }
   .wrap { max-width:1100px; margin:0 auto; padding:18px 16px 30px; }
   .count { color:#777; font-size:13px; margin-bottom:10px; }
+  .toolbar { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+  .toolbar select { margin-left:auto; padding:8px; border:1px solid #ddd; border-radius:6px; font-size:13px; background:#fff; }
   .chips { display:flex; gap:8px; flex-wrap:wrap; margin:0 0 16px; }
   .chips button { padding:8px 16px; border-radius:6px; border:1px solid #ddd; background:#eee; color:#555; font-size:13px; cursor:pointer; }
   .chips button.on { background:#7cb342; border-color:#7cb342; color:#fff; }
@@ -70,7 +72,7 @@
 </div>
 
 <div class="wrap">
-  <p class="count" id="count"></p>
+  <div class="toolbar"><span class="count" id="count"></span><select id="orden"><option value="nombre">Nombre A-Z</option><option value="ops">Más opiniones</option></select></div>
   <div class="chips" id="chips">
     <button data-t="todos" class="on">Todo</button>
     <button data-t="comer">🍽️ Comer</button>
@@ -119,6 +121,8 @@ function catDe(s){ return CATMAP[s.tipo] || "serv"; }
 function picDe(s){ return PIMGS[catDe(s)] || PDEFAULT; }
 function icoDe(s){ const NI = {"Azares":"🎰"}; return NI[s.n] || ICOMAP[catDe(s)] || "🏪"; }
 let f = "todos";
+let o = "nombre";
+function nOps(id){ return getRevs(id).length; }
 function setF(t){
   f = t;
   document.querySelectorAll("#chips button").forEach(x => x.classList.toggle("on", x.dataset.t === t));
@@ -128,7 +132,7 @@ function setF(t){
 function render(){
   const q = document.getElementById("q").value.toLowerCase();
   let r = S.filter(s => (f==="todos" || catDe(s)===f) && (s.n.toLowerCase().includes(q) || s.tipo.toLowerCase().includes(q)));
-  r = r.slice().sort((a,b) => (FEAT.includes(b.n)-FEAT.includes(a.n)) || a.n.localeCompare(b.n,"es"));
+  r = r.slice().sort((a,b) => (FEAT.includes(b.n)-FEAT.includes(a.n)) || (o==="ops" ? (nOps(b.n)-nOps(a.n)) : a.n.localeCompare(b.n,"es")));
   document.getElementById("count").textContent = r.length + " negocios";
   document.getElementById("list").innerHTML = r.map(s => {
     const id = s.n; const revs = getRevs(id); const dest = FEAT.includes(s.n);
@@ -137,7 +141,7 @@ function render(){
     + '<div class="body"><h2>' + esc(s.n) + '</h2>' + (dest?'<span class="star">⭐ Destacado</span>':"")
     + (s.dir?'<div class="meta">📍 ' + esc(s.dir) + ', Algemesí</div>':"")
     + '<div class="meta"><a style="color:#7cb342;" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(s.n + (s.dir?", "+s.dir:"") + ", Algemesí") + '">🧭 Cómo llegar</a></div>'
-    + '<div class="ops">' + (revs.length ? "💬 " + revs.length + " opiniones" : "Nuevo · ¡sé el primero en opinar!") + '</div>'
+    + '<div class="ops">' + (revs.length ? "💬 " + revs.length + " opiniones" : "Nuevo · ¡sé el primero en opinar!") + ' · <a style="color:#7cb342;" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent("Mira " + s.n + " en Guía Algemesí: https://studioweb-art.github.io/top-algemesi/") + '">🔗 Compartir</a></div>'
     + '<div class="actions">' + (s.tel?'<a class="b-call" href="' + telHref(s.tel) + '">📞 Llamar</a>':'<a class="b-call" href="#contacto">✏️ ¿Es tu negocio?</a>')
     + '<button class="b-op" onclick="document.getElementById(\'f_' + qn + '\').scrollIntoView({behavior:\'smooth\',block:\'center\'})">✍️ Opinar</button></div>'
     + '<div class="revs">' + revs.map(v=>'<div class="rev"><b>' + esc(v.n) + ' · ' + "★".repeat(v.s) + '</b>' + esc(v.t) + '</div>').join("") + '</div>'
@@ -160,6 +164,7 @@ function opinar(id){
   render();
 }
 document.getElementById("q").addEventListener("input", render);
+document.getElementById("orden").addEventListener("change", e => { o = e.target.value; render(); });
 document.querySelectorAll("#chips button").forEach(b => b.addEventListener("click", () => {
   document.querySelectorAll("#chips button").forEach(x => x.classList.remove("on"));
   b.classList.add("on"); f = b.dataset.t; render();
