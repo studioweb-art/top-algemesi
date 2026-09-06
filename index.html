@@ -136,6 +136,7 @@ function render(){
     return '<div class="card' + (dest?" dest":"") + '"><div class="pic">' + icoDe(s) + '<img src="' + picDe(s) + '" alt="" loading="lazy" onerror="this.remove()"><span class="pbadge">' + esc(s.tipo) + '</span></div>'
     + '<div class="body"><h2>' + esc(s.n) + '</h2>' + (dest?'<span class="star">⭐ Destacado</span>':"")
     + (s.dir?'<div class="meta">📍 ' + esc(s.dir) + ', Algemesí</div>':"")
+    + '<div class="meta"><a style="color:#7cb342;" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(s.n + " Algemesí") + '">📷 Fotos y cómo llegar</a></div>'
     + '<div class="ops">' + (revs.length ? "💬 " + revs.length + " opiniones" : "Nuevo · ¡sé el primero en opinar!") + '</div>'
     + '<div class="actions">' + (s.tel?'<a class="b-call" href="' + telHref(s.tel) + '">📞 Llamar</a>':'<a class="b-call" href="#contacto">✏️ ¿Es tu negocio?</a>')
     + '<button class="b-op" onclick="document.getElementById(\'f_' + qn + '\').scrollIntoView({behavior:\'smooth\',block:\'center\'})">✍️ Opinar</button></div>'
