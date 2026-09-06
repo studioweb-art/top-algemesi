@@ -82,7 +82,7 @@ function render(){
     <div class="ops">${revs.length ? "💬 " + revs.length + " opiniones" : "Nuevo · ¡sé el primero en opinar!"}</div>
     <div class="actions">${s.tel?`<a class="b-call" href="${telHref(s.tel)}">📞 ${esc(s.tel)}</a>`:""}
     <button class="b-op" onclick="document.getElementById('f_${esc(s.n)}').scrollIntoView({behavior:'smooth',block:'center'})">✍️ Opinar</button></div>
-    <div class="revs">${revs.map(v=>`<div class="rev"><b>${esc(v.n)} · ${"★".repeat(v.s)}</b>${esc(v.t)}</div>`).join("")}</div>
+    <div class="revs">${revs.map((v,idx)=>`<div class="rev"><b>${esc(v.n)} · ${"★".repeat(v.s)}</b>${esc(v.t)}<br><a href="#" onclick="borrar('${esc(s.n).replace(/'/g,"\\'")}',${idx});return false;" style="color:#c0392b;font-size:12px;">🗑️ Borrar</a></div>`).join("")}</div>
     <div class="revform" id="f_${esc(s.n)}">
       <input id="n_${esc(s.n)}" placeholder="Tu nombre">
       <select id="s_${esc(s.n)}"><option value="5">★★★★★ (5)</option><option value="4">★★★★ (4)</option><option value="3">★★★ (3)</option><option value="2">★★ (2)</option><option value="1">★ (1)</option></select>
@@ -98,6 +98,11 @@ function opinar(id){
   const t = g("t").value.trim();
   if(!t){ alert("Escribe tu opinión primero 🙂"); return; }
   const revs = getRevs(id); revs.unshift({n:n, s:s, t:t});
+  localStorage.setItem("rev_"+id, JSON.stringify(revs));
+  render();
+}
+function borrar(id, idx){
+  const revs = getRevs(id); revs.splice(idx, 1);
   localStorage.setItem("rev_"+id, JSON.stringify(revs));
   render();
 }
