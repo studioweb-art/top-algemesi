@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TOP Algemesí · Todos los oficios</title>
+<title>TOP Algemesí · Todos los negocios</title>
 <style>
   * { box-sizing:border-box; margin:0; padding:0; }
   body { font-family:-apple-system, 'Segoe UI', Roboto, Arial, sans-serif; background:#f2f2f2; color:#1c1c1c; }
@@ -11,21 +11,21 @@
   .topbar .logo { font-weight:800; font-size:20px; white-space:nowrap; }
   .topbar .logo span { color:#00aa6c; }
   .topbar input { flex:1; padding:9px 12px; border-radius:20px; border:none; font-size:14px; min-width:0; }
-  .hero { background:linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)), url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1400&q=70'); background-size:cover; background-position:center; color:#fff; padding:40px 20px; text-align:center; }
-  .hero h1 { font-size:28px; margin-bottom:6px; }
+  .hero { background:linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)), url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1400&q=70'); background-size:cover; background-position:center; color:#fff; padding:36px 20px; text-align:center; }
+  .hero h1 { font-size:27px; margin-bottom:6px; }
   .hero p { font-size:15px; opacity:.9; }
   .wrap { max-width:760px; margin:0 auto; padding:14px 14px 30px; }
+  .count { text-align:center; color:#666; font-size:13px; margin-bottom:8px; }
   .chips { display:flex; gap:8px; flex-wrap:wrap; margin:4px 0 12px; }
   .chips button { padding:8px 15px; border-radius:20px; border:1px solid #ccc; background:#fff; font-size:14px; cursor:pointer; }
   .chips button.on { background:#000; color:#fff; border-color:#000; }
-  .card { background:#fff; border-radius:14px; overflow:hidden; margin-bottom:14px; box-shadow:0 2px 8px rgba(0,0,0,.08); }
-  .card img { width:100%; height:150px; object-fit:cover; display:block; }
-  .card .body { padding:14px 16px 16px; }
-  .rank { display:inline-block; background:#000; color:#fff; font-size:12px; font-weight:800; border-radius:8px; padding:3px 9px; margin-bottom:6px; }
-  .card h2 { font-size:20px; }
-  .stars { color:#00aa6c; font-size:16px; letter-spacing:2px; margin:4px 0; }
-  .stars small { color:#666; letter-spacing:0; font-size:13px; }
+  .card { background:#fff; border-radius:14px; padding:14px 16px; margin-bottom:10px; box-shadow:0 2px 8px rgba(0,0,0,.08); }
+  .card.dest { border:2px solid #e0a458; }
+  .card h2 { font-size:18px; }
+  .card .tipo { font-size:12px; color:#fff; background:#6b4423; border-radius:10px; padding:2px 9px; display:inline-block; margin:5px 0; }
+  .card .star { font-size:12px; background:#e0a458; color:#1a100b; border-radius:10px; padding:2px 9px; display:inline-block; margin:5px 0 5px 4px; font-weight:bold; }
   .meta { font-size:13px; color:#666; margin:2px 0; }
+  .ops { font-size:13px; color:#00aa6c; font-weight:700; margin-top:4px; }
   .actions { display:flex; gap:8px; margin-top:10px; }
   .actions a, .actions button { flex:1; text-align:center; padding:11px; border-radius:10px; font-size:14px; font-weight:700; text-decoration:none; cursor:pointer; border:none; }
   .b-call { background:#00aa6c; color:#fff; }
@@ -40,98 +40,62 @@
 </style>
 </head>
 <body>
-
 <div class="topbar">
   <div class="logo">TOP<span>Algemesí</span></div>
   <input id="q" type="search" placeholder="Buscar negocio u oficio...">
 </div>
-
 <div class="hero">
-  <h1>Lo mejor de Algemesí</h1>
-  <p>Bares, peluquerías, talleres y servicios, con opiniones</p>
+  <h1>Todos los negocios de Algemesí</h1>
+  <p id="sub">Bares, oficios, tiendas y servicios, con opiniones</p>
 </div>
-
 <div class="wrap">
+  <p class="count" id="count"></p>
   <div class="chips" id="chips">
     <button data-t="todos" class="on">Todo</button>
     <button data-t="comer">🍽️ Comer</button>
     <button data-t="pelo">💇 Peluquerías</button>
     <button data-t="taller">🔧 Talleres</button>
     <button data-t="serv">🛠️ Servicios</button>
-    <button data-t="salud">💊 Farmacias</button>
+    <button data-t="salud">💊 Salud</button>
+    <button data-t="tienda">🛒 Tiendas</button>
     <button data-t="deporte">🏋️ Deporte</button>
   </div>
   <div id="list"></div>
-  <p style="font-size:12px;color:#999;text-align:center;">* Notas y opiniones de muestra. Direcciones y teléfonos reales.</p>
 </div>
-
-<footer>TOP Algemesí · muestra de demostración</footer>
-
+<footer>TOP Algemesí · muestra de demostración · datos de mapa abierto</footer>
 <script>
-const U = id => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=800&q=60`;
-const IMG = {
-  food1:U("photo-1414235077428-338989a2e8c0"), food2:U("photo-1555396273-367ea4eb4db5"),
-  food3:U("photo-1504674900247-0877df9cc836"), food4:U("photo-1552566626-52f8b828add9"),
-  pelo:U("photo-1503951914875-452162b0f3f1"), taller:U("photo-1486262715619-67b85e0b08d3"),
-  tienda:U("photo-1441986300917-64674bd600d8"), gym:U("photo-1534438327276-14e5300c3a48")
-};
-const S = [
-  {id:"xopera", n:"Asador La Xopera", t:"comer", tipo:"Asador · Brasas", img:IMG.food1, nota:4.6, nrev:84, dir:"Algemesí", tel:"", d:"Carnes a la brasa."},
-  {id:"mirandas", n:"Miranda's Resto-Bar", t:"comer", tipo:"Resto-Bar", img:IMG.food2, nota:4.5, nrev:132, dir:"C/ Molí de la Vila 37", tel:"+34960196909", telt:"960 196 909", d:"Almuerzos Lun-Dom · Cenas Jue-Sáb."},
-  {id:"encant", n:"L'Encant Bar i Restaurant", t:"comer", tipo:"Restaurante", img:IMG.food3, nota:4.4, nrev:97, dir:"C/ Sant Nicolau de Bari 10", tel:"+34663114311", telt:"663 114 311", d:"Menú del día económico."},
-  {id:"trencadis", n:"Trencadís Restaurante", t:"comer", tipo:"Restaurante", img:IMG.food4, nota:4.3, nrev:61, dir:"C/ Mossén Blanch 16", tel:"+34962424364", telt:"962 424 364", d:"Menú diario 16,90 € · Fin de semana 25,90 €."},
-  {id:"oliverio", n:"Casa Oliverio", t:"comer", tipo:"Restaurante", img:IMG.food1, nota:4.2, nrev:45, dir:"C/ Vall d'Albaida 19", tel:"+34675042789", telt:"675 042 789", d:"Cocina casera."},
-  {id:"muralla", n:"Restaurante Gran Muralla", t:"comer", tipo:"Chino", img:IMG.food3, nota:4.1, nrev:58, dir:"C/ Valencia 194", tel:"+34962481052", telt:"962 481 052", d:"Comida china."},
-  {id:"ciao", n:"Ristorante Ciao Bella", t:"comer", tipo:"Italiano", img:IMG.food2, nota:4.0, nrev:39, dir:"Algemesí", tel:"", d:"Pizzas y pastas."},
-  {id:"marin", n:"Perruqueria Marin", t:"pelo", tipo:"Peluquería", img:IMG.pelo, nota:4.7, nrev:73, dir:"C/ Vall d'Albaida", tel:"+34669711954", telt:"669 711 954", d:""},
-  {id:"raul", n:"Raúl Perruquer", t:"pelo", tipo:"Peluquería", img:IMG.pelo, nota:4.6, nrev:51, dir:"C/ Polinyà 2 · Lun-Vie 9:30-13:30 y 16-20", tel:"+34604430816", telt:"604 430 816", d:""},
-  {id:"clarys", n:"Clary's", t:"pelo", tipo:"Peluquería", img:IMG.pelo, nota:4.5, nrev:38, dir:"C/ dels Arbres 55", tel:"+34962423833", telt:"962 423 833", d:""},
-  {id:"mg", n:"MG Perruqueria", t:"pelo", tipo:"Peluquería", img:IMG.pelo, nota:4.4, nrev:29, dir:"C/ Sant Josep de Calassanç 1", tel:"", d:"Mar-Vie 9-13:30 y 16-19 · Sáb 9-13:30."},
-  {id:"dani", n:"La Barbería de Dani", t:"pelo", tipo:"Barbería", img:IMG.pelo, nota:4.6, nrev:44, dir:"C/ València 63", tel:"", d:""},
-  {id:"pingo", n:"Pingo", t:"pelo", tipo:"Peluquería", img:IMG.pelo, nota:4.3, nrev:22, dir:"Plaça de la Ribera 17", tel:"", d:""},
-  {id:"vmarch", n:"Tallers Vicent March", t:"taller", tipo:"Taller mecánico", img:IMG.taller, nota:4.5, nrev:36, dir:"C/ Sant Nicolau de Bari 5 · Lun-Vie 8-19", tel:"+34639236590", telt:"639 236 590", d:""},
-  {id:"latorre", n:"Taller Javier Latorre", t:"taller", tipo:"Taller mecánico", img:IMG.taller, nota:4.4, nrev:28, dir:"C/ Valldigna 4", tel:"+34697601637", telt:"697 601 637", d:""},
-  {id:"msilla", n:"Talleres Martínez Silla", t:"taller", tipo:"Taller mecánico", img:IMG.taller, nota:4.3, nrev:19, dir:"C/ Sant Nicolau de Bari 1", tel:"", d:""},
-  {id:"ribelles", n:"Taller Ribelles", t:"taller", tipo:"Taller mecánico", img:IMG.taller, nota:4.2, nrev:15, dir:"C/ Costera", tel:"", d:""},
-  {id:"llacer", n:"S.A.T. Llacer", t:"serv", tipo:"Reparación electrónica", img:IMG.tienda, nota:4.5, nrev:31, dir:"C/ Albalat 88 · Lun-Vie 9-13:30 y 16:30-20", tel:"+34962423519", telt:"962 423 519", d:"Servicio técnico."},
-  {id:"blay", n:"Vicent Blay Fotògraf", t:"serv", tipo:"Fotógrafo", img:IMG.tienda, nota:4.8, nrev:26, dir:"Av. Generalitat 44", tel:"", d:""},
-  {id:"jaume", n:"Jaume Tomàs Fotografía", t:"serv", tipo:"Fotógrafo", img:IMG.tienda, nota:4.7, nrev:21, dir:"C/ València 57", tel:"", d:""},
-  {id:"faribera", n:"Farmacia La Ribera", t:"salud", tipo:"Farmacia", img:IMG.tienda, nota:4.6, nrev:40, dir:"Plaça de la Ribera 4", tel:"+34962420007", telt:"962 420 007", d:""},
-  {id:"tormo", n:"Farmacia Tormo Talens", t:"salud", tipo:"Farmacia", img:IMG.tienda, nota:4.5, nrev:25, dir:"C/ dels Monts 7", tel:"+34962421097", telt:"962 421 097", d:""},
-  {id:"castell", n:"Farmacia Castell", t:"salud", tipo:"Farmacia", img:IMG.tienda, nota:4.5, nrev:23, dir:"Parc Salvador Castell 6", tel:"+34962422145", telt:"962 422 145", d:""},
-  {id:"coach", n:"Mr. Coach", t:"deporte", tipo:"Gimnasio", img:IMG.gym, nota:4.7, nrev:49, dir:"Algemesí", tel:"", d:"Entrenamiento."}
-];
-function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
-function stars(n){ let s=""; for(let i=1;i<=5;i++) s += i<=Math.round(n) ? "●" : "○"; return s; }
+const S = [{"n": "Café-Bar Colón", "t": "comer", "tipo": "Cafetería", "dir": "", "tel": ""}, {"n": "Mercadona", "t": "tienda", "tipo": "Supermercado", "dir": "", "tel": ""}, {"n": "Economy Cash", "t": "tienda", "tipo": "Supermercado", "dir": "", "tel": ""}, {"n": "Bar Llopis", "t": "comer", "tipo": "Restaurante", "dir": "", "tel": ""}, {"n": "La Tavrna de Santi", "t": "comer", "tipo": "Bar", "dir": "", "tel": ""}, {"n": "Bar Cooperativa", "t": "comer", "tipo": "Bar", "dir": "", "tel": ""}, {"n": "Bar Garrofera", "t": "comer", "tipo": "Bar", "dir": "", "tel": ""}, {"n": "Bar Nou Saturno", "t": "comer", "tipo": "Bar", "dir": "", "tel": ""}, {"n": "El Passeig", "t": "comer", "tipo": "Cafetería", "dir": "", "tel": ""}, {"n": "Al Tall", "t": "comer", "tipo": "Cafetería", "dir": "Carrer de Sant Josep de Calassanç 1", "tel": ""}, {"n": "Restaurant La Parra", "t": "comer", "tipo": "Restaurante", "dir": "", "tel": ""}, {"n": "Bar Marjal", "t": "comer", "tipo": "Bar", "dir": "", "tel": ""}, {"n": "Ristorante Ciao Bella", "t": "comer", "tipo": "Restaurante", "dir": "", "tel": ""}, {"n": "Pizza Pala", "t": "comer", "tipo": "Comida rápida", "dir": "Placeta del Carbó 1", "tel": ""}, {"n": "Algemesí kebab", "t": "comer", "tipo": "Comida rápida", "dir": "Carrer de la Muntanya 14", "tel": "+34 961946520"}, {"n": "Phone House", "t": "tienda", "tipo": "Mobile Phone", "dir": "", "tel": ""}, {"n": "Restaurante Avalon", "t": "comer", "tipo": "Restaurante", "dir": "", "tel": ""}, {"n": "Café Chester", "t": "comer", "tipo": "Bar", "dir": "Carrer de la Muntanya 10", "tel": ""}, {"n": "Orange", "t": "tienda", "tipo": "Telecommunication", "dir": "Carrer de la Muntanya 20", "tel": ""}, {"n": "Manhattan", "t": "comer", "tipo": "Bar", "dir": "Carrer de la Muntanya 5", "tel": ""}, {"n": "Movistar", "t": "tienda", "tipo": "Telecommunication", "dir": "", "tel": ""}, {"n": "Bar Guevara", "t": "comer", "tipo": "Bar", "dir": "", "tel": ""}, {"n": "Paradise", "t": "comer", "tipo": "Bar", "dir": "", "tel": ""}, {"n": "Yoigo", "t": "tienda", "tipo": "Telecommunication", "dir": "Carrer de la Muntanya 3", "tel": ""}, {"n": "Bar La terrasseta", "t": "comer", "tipo": "Bar", "dir": "", "tel": ""}, {"n": "Vicent Blay Fotògraf", "t": "serv", "tipo": "photographer", "dir": "", "tel": ""}, {"n": "McDonald's", "t": "comer", "tipo": "Comida rápida", "dir": "", "tel": ""}, {"n": "Feu Vert", "t": "taller", "tipo": "Taller mecánico", "dir": "", "tel": "+34 962 404 916"}, {"n": "Carol Floristes", "t": "tienda", "tipo": "Florist", "dir": "", "tel": ""}, {"n": "Coaliment", "t": "tienda", "tipo": "Supermercado", "dir": "", "tel": ""}, {"n": "La Perla Negra", "t": "comer", "tipo": "Restaurante", "dir": "Carrer de l'Ardiacà Pere Esplugues 98", "tel": ""}, {"n": "Bar Alhambra", "t": "comer", "tipo": "Bar", "dir": "", "tel": ""}, {"n": "Despacho de Pan Joana", "t": "tienda", "tipo": "Horno", "dir": "Carrer de l'Ardiacà Pere Esplugues", "tel": ""}, {"n": "Alejandra Casterá Rosario", "t": "salud", "tipo": "Farmacia", "dir": "Carrer del General Espartero 4", "tel": "+34 962 403 836"}, {"n": "Mobles Blay", "t": "tienda", "tipo": "Furniture", "dir": "", "tel": ""}, {"n": "Nissan", "t": "taller", "tipo": "Taller mecánico", "dir": "", "tel": ""}, {"n": "Peugeot", "t": "taller", "tipo": "Taller mecánico", "dir": "", "tel": ""}, {"n": "La Canaleta", "t": "tienda", "tipo": "Books", "dir": "", "tel": ""}, {"n": "Forn Sant Benet", "t": "tienda", "tipo": "Horno", "dir": "", "tel": ""}, {"n": "Cocina Fácil", "t": "tienda", "tipo": "Furniture", "dir": "", "tel": ""}, {"n": "Burger King", "t": "comer", "tipo": "Comida rápida", "dir": "", "tel": ""}, {"n": "KFC", "t": "comer", "tipo": "Comida rápida", "dir": "", "tel": "+34962401726"}, {"n": "Sushi Yumi", "t": "comer", "tipo": "Restaurante", "dir": "", "tel": ""}, {"n": "Quin Pizzeria", "t": "comer", "tipo": "Cafetería", "dir": "Avinguda de la Dignitat Humana 2", "tel": ""}, {"n": "Administracion de Loteria nº 5 \"La Sort\"", "t": "tienda", "tipo": "Lottery", "dir": "Avinguda de la Dignitat Humana 2", "tel": "+34 962 41 50 20"}, {"n": "Carniceria Casa Oliver", "t": "tienda", "tipo": "Butcher", "dir": "Carrer Mestre Palau", "tel": ""}, {"n": "Quiosco Kris", "t": "tienda", "tipo": "Kiosk", "dir": "Carrer Doctor Francesc Bono", "tel": ""}, {"n": "Bar Sagitario", "t": "comer", "tipo": "Bar", "dir": "Carrer de Jaume de Olid Sequier", "tel": ""}, {"n": "Kebab la Ribera", "t": "comer", "tipo": "Comida rápida", "dir": "Carrer de Sant Sebastià 1", "tel": "+34 962422501"}, {"n": "Mister Minit", "t": "serv", "tipo": "key_cutter", "dir": "Avinguda de la Dignitat Humana 2", "tel": "+34 962 40 12 23"}, {"n": "Restaurante Chino Mulan", "t": "comer", "tipo": "Restaurante", "dir": "", "tel": ""}, {"n": "Sprinter", "t": "deporte", "tipo": "Deporte", "dir": "25", "tel": "+34 960612239"}, {"n": "Merkal Calzados", "t": "tienda", "tipo": "Shoes", "dir": "", "tel": ""}, {"n": "Asador Free Wok Alzira", "t": "comer", "tipo": "Restaurante", "dir": "Carrer d'Albalat", "tel": "+34 962 415 748"}, {"n": "Renault Ginestar", "t": "taller", "tipo": "Taller mecánico", "dir": "Avinguda de la Dignitat Humana 5", "tel": "+34 96 241 20 90"}, {"n": "Asador Restaurante La Ribera", "t": "comer", "tipo": "Restaurante", "dir": "", "tel": ""}, {"n": "CCF Motors", "t": "taller", "tipo": "Taller mecánico", "dir": "", "tel": ""}, {"n": "Restaurante La Mesedora", "t": "comer", "tipo": "Restaurante", "dir": "Carnissers 22", "tel": "+34 960 62 82 98"}, {"n": "Popeyes", "t": "comer", "tipo": "Comida rápida", "dir": "", "tel": ""}, {"n": "Pérez Pino", "t": "salud", "tipo": "Farmacia", "dir": "Carrer de l'Acadèmic Segura 15", "tel": "+34 962 481 164"}, {"n": "Niclós Gutiérrez", "t": "salud", "tipo": "Farmacia", "dir": "Carrer de la Muntanya 63", "tel": "+34 962 421 330"}, {"n": "masymas", "t": "tienda", "tipo": "Supermercado", "dir": "Carrer de la Muntanya 7", "tel": ""}, {"n": "Consum", "t": "tienda", "tipo": "Supermercado", "dir": "Plaça del Mercat 9", "tel": ""}, {"n": "Charter", "t": "tienda", "tipo": "Supermercado", "dir": "Copal 1", "tel": ""}, {"n": "SoloPizza", "t": "comer", "tipo": "Comida rápida", "dir": "Carrer dels Figueres 34", "tel": "+34 962426133"}, {"n": "Casa Mercedes", "t": "tienda", "tipo": "Shoes", "dir": "Carrer de la Muntanya 6", "tel": "+34 962420741"}, {"n": "Soul Bikes", "t": "tienda", "tipo": "Bicycle", "dir": "Carrer Sueca 18", "tel": ""}, {"n": "El Catòlic", "t": "comer", "tipo": "Restaurante", "dir": "Carrer Major 39", "tel": ""}, {"n": "Arturo Cortés Talens", "t": "salud", "tipo": "Farmacia", "dir": "Carrer Major 30", "tel": "+34 962 570 011"}, {"n": "Vicent Sais Gimeno", "t": "salud", "tipo": "Farmacia", "dir": "", "tel": ""}, {"n": "Tulell", "t": "salud", "tipo": "Farmacia", "dir": "Carrer Joanot Martorell 16", "tel": "+34 962 413 087"}, {"n": "Farmacia La Ribera", "t": "salud", "tipo": "Farmacia", "dir": "Plaça de la Ribera 4", "tel": "+34 962 420 007"}, {"n": "Farmacia Castell", "t": "salud", "tipo": "Farmacia", "dir": "Parc de Salvador Castell 6", "tel": "+34 962 422 145"}, {"n": "Max-Mini", "t": "tienda", "tipo": "Dry Cleaning", "dir": "", "tel": ""}, {"n": "Basic-Fit", "t": "deporte", "tipo": "Deporte", "dir": "", "tel": ""}, {"n": "Perruqueria Marin", "t": "pelo", "tipo": "Peluquería", "dir": "Carrer de la Vall d'Albaida", "tel": "+34 669 711 954"}, {"n": "Casa Oliverio", "t": "comer", "tipo": "Restaurante", "dir": "Carrer de la Vall d'Albaida 19", "tel": "+34 675 042 789"}, {"n": "MG", "t": "pelo", "tipo": "Peluquería", "dir": "Carrer de Sant Josep de Calassanç 1", "tel": ""}, {"n": "El Plà", "t": "comer", "tipo": "Restaurante", "dir": "Carrer de la Canal de Navarrés 2", "tel": ""}, {"n": "Coera", "t": "tienda", "tipo": "Appliance", "dir": "Avinguda de la Generalitat Valenciana 23", "tel": "+34 666 580 913"}, {"n": "Clínik Salud", "t": "salud", "tipo": "Dentista", "dir": "Avinguda de la Generalitat Valenciana 7", "tel": "+34 962 483 202"}, {"n": "Dulce Tentación", "t": "comer", "tipo": "Cafetería", "dir": "Plaça del Mercat 9", "tel": ""}, {"n": "Jing Tonic", "t": "comer", "tipo": "Bar", "dir": "Carrer dels Arbres 5", "tel": ""}, {"n": "El Baret de Cris", "t": "comer", "tipo": "Cafetería", "dir": "Plaça del Mercat 4", "tel": ""}, {"n": "Folch", "t": "tienda", "tipo": "Optician", "dir": "", "tel": ""}, {"n": "Samaruc", "t": "tienda", "tipo": "Books", "dir": "Carrer de Sant Josep de Calassanç 11", "tel": ""}, {"n": "Mirandas", "t": "comer", "tipo": "Restaurante", "dir": "Carrer del Molí de la Vila 35", "tel": "+34 646 187 895"}, {"n": "Cortés Ribera", "t": "salud", "tipo": "Farmacia", "dir": "Carrer de València 7", "tel": "+34 962 424 956"}, {"n": "Collado", "t": "tienda", "tipo": "Optician", "dir": "Plaça de la Mare de Déu dels Dolors 4", "tel": ""}, {"n": "Olmos", "t": "tienda", "tipo": "Funeral Directors", "dir": "Carrer de València 14", "tel": "+34 962 421 423"}, {"n": "Rudeltour Viatges", "t": "tienda", "tipo": "Travel Agency", "dir": "Placeta dels Àngels 18", "tel": "+34 960 093 467"}, {"n": "Trencadís", "t": "comer", "tipo": "Restaurante", "dir": "Carrer de Mossén Blanch 16", "tel": "+34 962 424 364"}, {"n": "Cantonet", "t": "comer", "tipo": "Bar", "dir": "Carrer de Lluís Vives 27", "tel": ""}, {"n": "Druni", "t": "tienda", "tipo": "Perfumery", "dir": "Carrer dels Arbres 10", "tel": ""}, {"n": "Azares", "t": "tienda", "tipo": "Bookmaker", "dir": "Carrer de Sant Josep de Calassanç 4", "tel": ""}, {"n": "Vistalia", "t": "tienda", "tipo": "Optician", "dir": "Placeta dels Àngels 20", "tel": ""}, {"n": "Laurel", "t": "comer", "tipo": "Bar", "dir": "", "tel": ""}, {"n": "Millar Faus", "t": "tienda", "tipo": "Appliance", "dir": "Carrer de Sant Sebastià 7", "tel": ""}, {"n": "La Bodegueta", "t": "comer", "tipo": "Restaurante", "dir": "", "tel": ""}, {"n": "Sènia Informàtica", "t": "tienda", "tipo": "Computer", "dir": "Carrer de Lluís Vives 26", "tel": ""}, {"n": "Suprasoft", "t": "tienda", "tipo": "Computer", "dir": "Carrer de Lluís Vives 27", "tel": ""}, {"n": "Rockafull", "t": "comer", "tipo": "Bar", "dir": "", "tel": ""}, {"n": "Raúl perruquer", "t": "pelo", "tipo": "Peluquería", "dir": "Carrer de Polinyà 2", "tel": "+34 604 430 816"}, {"n": "L' Encontre", "t": "comer", "tipo": "Bar", "dir": "Avinguda de la Generalitat Valenciana 6", "tel": ""}, {"n": "Retalls Amparo", "t": "tienda", "tipo": "Sewing", "dir": "Plaça de la Ribera 1", "tel": ""}, {"n": "La Lavandería Blue-Wash Line", "t": "tienda", "tipo": "Laundry", "dir": "Plaça de la Ribera 19", "tel": ""}, {"n": "Tallers Vicent March", "t": "taller", "tipo": "Taller mecánico", "dir": "Carrer de Sant Nicolau de Bari 5", "tel": "+34 639 236 590"}, {"n": "Bar cafetería La Costera", "t": "comer", "tipo": "Bar", "dir": "Carrer de la Valldigna 15", "tel": "+34 962 421 933"}, {"n": "Centro Procolor", "t": "tienda", "tipo": "Paint", "dir": "Avinguda de la Generalitat Valenciana 4", "tel": ""}, {"n": "Zafiro Tours", "t": "tienda", "tipo": "Travel Agency", "dir": "", "tel": ""}, {"n": "Ribera Plaça", "t": "comer", "tipo": "Cafetería", "dir": "Plaça de la Ribera", "tel": ""}, {"n": "López Ferretería", "t": "tienda", "tipo": "Hardware", "dir": "Carrer de Ferran d'Aragó 34", "tel": ""}, {"n": "L'Encant", "t": "comer", "tipo": "Restaurante", "dir": "Carrer de Sant Nicolau de Bari 10", "tel": "+34 691 496 094"}, {"n": "Reciclats L'Avinguda", "t": "tienda", "tipo": "Printer Ink", "dir": "Avinguda de la Generalitat Valenciana 17", "tel": ""}, {"n": "Taller Ribelles", "t": "taller", "tipo": "Taller mecánico", "dir": "Carrer de la Costera", "tel": ""}, {"n": "Cinema Tattoo", "t": "tienda", "tipo": "Tattoo", "dir": "Carrer d'Albalat 92", "tel": "+34 637 868 470"}, {"n": "Carlin", "t": "tienda", "tipo": "Stationery", "dir": "Carrer d'Albalat 70", "tel": ""}, {"n": "Frutes Desi", "t": "tienda", "tipo": "Greengrocer", "dir": "Carrer d'Albalat 58", "tel": "+34 620 798 979"}, {"n": "La Llar de les Flors", "t": "tienda", "tipo": "Florist", "dir": "Carrer d'Albalat 65", "tel": "+34 679 833 238"}, {"n": "Tormo Talens", "t": "salud", "tipo": "Farmacia", "dir": "Carrer dels Mont 7", "tel": "+34 962 421 097"}, {"n": "Forn San Pio X", "t": "tienda", "tipo": "Horno", "dir": "Carrer de les Escoles Pies 32", "tel": ""}, {"n": "Castelló Alepuz", "t": "salud", "tipo": "Farmacia", "dir": "Carrer d'Albalat 131", "tel": "+34 962 482 358"}, {"n": "Premio", "t": "tienda", "tipo": "Kiosk", "dir": "Carrer d'Albalat 32", "tel": ""}, {"n": "Juan B. Juan", "t": "tienda", "tipo": "Stationery", "dir": "Carrer de Mossén Blanch 15", "tel": ""}, {"n": "Pastisseria Monar", "t": "tienda", "tipo": "Pastry", "dir": "", "tel": ""}, {"n": "El Tapeo", "t": "comer", "tipo": "Bar", "dir": "Carrer de Santa Rosa de Lima 19", "tel": ""}, {"n": "S.A.T. Llacer", "t": "serv", "tipo": "electronics_repair", "dir": "Carrer d'Albalat 88", "tel": "+34 962 423 519"}, {"n": "Bar Xelo", "t": "comer", "tipo": "Bar", "dir": "Carrer d'Albalat 72", "tel": ""}, {"n": "Òptica Betí", "t": "tienda", "tipo": "Optician", "dir": "Carrer d'Albalat 58", "tel": ""}, {"n": "Loterías y Apuestas del Estado", "t": "tienda", "tipo": "Lottery", "dir": "Carrer d'Albalat 54", "tel": ""}, {"n": "Cerdà", "t": "tienda", "tipo": "Pastry", "dir": "Carrer d'Albalat 123", "tel": ""}, {"n": "Uhartea Cafeteria", "t": "comer", "tipo": "Cafetería", "dir": "Carrer de València 40", "tel": ""}, {"n": "Kuups", "t": "tienda", "tipo": "Supermercado", "dir": "Carrer d'Albalat 119", "tel": ""}, {"n": "Multiópticas", "t": "tienda", "tipo": "Optician", "dir": "Carrer d'Albalat 57", "tel": ""}, {"n": "El Viejo Marinero", "t": "comer", "tipo": "Bar", "dir": "Carrer d'Albalat 68", "tel": ""}, {"n": "Urban Clean", "t": "tienda", "tipo": "Dry Cleaning", "dir": "Carrer de Sant Jaume Apòstol 2a", "tel": "+34 671 653 025"}, {"n": "Passa i Tasta", "t": "comer", "tipo": "Bar", "dir": "Carrer de Jovellanos 4", "tel": "+34 611 146 096"}, {"n": "Montrull", "t": "tienda", "tipo": "Optician", "dir": "Carrer de Cervantes 4A", "tel": ""}, {"n": "Fetitxe", "t": "tienda", "tipo": "Bag", "dir": "Carrer d'Albalat 38", "tel": ""}, {"n": "Esteve", "t": "tienda", "tipo": "Paint", "dir": "Carrer de València 49", "tel": ""}, {"n": "La Pebrella", "t": "tienda", "tipo": "Herbalist", "dir": "Carrer de València 56", "tel": "+34 962 425 025"}, {"n": "Tarazona Gadea", "t": "salud", "tipo": "Farmacia", "dir": "Carrer de Jovellanos 5", "tel": "+34 962 482 088"}, {"n": "Arroz de Romero", "t": "comer", "tipo": "Comida rápida", "dir": "Carrer del Marquès de Sotelo 4", "tel": "+34 960 088 805"}, {"n": "El Raconet", "t": "comer", "tipo": "Cafetería", "dir": "Plaça Auditori Moreno Gans 2", "tel": "+34 722 74 10 08"}, {"n": "Desig", "t": "tienda", "tipo": "Beauty", "dir": "Carrer de l'Organista Sos 4", "tel": "+34 962 422 519"}, {"n": "Centre Estetic Noelia Peñalver", "t": "tienda", "tipo": "Beauty", "dir": "Carrer del Teular 3B", "tel": "+34 963 124 733"}, {"n": "Nadal Talens", "t": "salud", "tipo": "Farmacia", "dir": "Carrer de Cánovas del Castillo 2", "tel": "+34 962 420 509"}, {"n": "Soler Montejano", "t": "salud", "tipo": "Farmacia", "dir": "Carrer del Raval de Sant Roc 43", "tel": "+34 962 423 923"}, {"n": "Taller Javier Latorre", "t": "taller", "tipo": "Taller mecánico", "dir": "Carrer de la Valldigna 4", "tel": "+34 697 601 637"}, {"n": "Pepe Juan", "t": "tienda", "tipo": "Lottery", "dir": "Carrer de València 82", "tel": ""}, {"n": "Tu Casa", "t": "tienda", "tipo": "Houseware", "dir": "Carrer de València 196", "tel": ""}, {"n": "La Barbería de Dani", "t": "pelo", "tipo": "Peluquería", "dir": "Carrer de València 63", "tel": ""}, {"n": "Ibor", "t": "tienda", "tipo": "Clothes", "dir": "Plaza Mercado 15", "tel": ""}, {"n": "Antara", "t": "tienda", "tipo": "Florist", "dir": "Plaza Mercado 19", "tel": "+34 635 732 943"}, {"n": "Talleres Martínez Silla", "t": "taller", "tipo": "Taller mecánico", "dir": "Carrer de Sant Nicolau de Bari 1", "tel": ""}, {"n": "Jaume Tomàs Fotografía", "t": "serv", "tipo": "photographer", "dir": "Carrer de València 57", "tel": ""}, {"n": "Copistería Giner", "t": "tienda", "tipo": "Stationery", "dir": "Carrer de Cervantes", "tel": "+34 962 420 561"}, {"n": "Laura Regals", "t": "tienda", "tipo": "Gift", "dir": "Carrer de Lluís Vives 3", "tel": ""}, {"n": "Centre Veterinaria Algemesi", "t": "serv", "tipo": "Veterinario", "dir": "Carrer de València 109", "tel": "+34 962 480 967"}, {"n": "Zenaida", "t": "tienda", "tipo": "Beauty", "dir": "Plaza Mercado 16", "tel": ""}, {"n": "Ferretería Plaça Major", "t": "tienda", "tipo": "Hardware", "dir": "Calle de la Montaña 15", "tel": ""}, {"n": "Pingo", "t": "pelo", "tipo": "Peluquería", "dir": "Plaça de la Ribera 17", "tel": ""}, {"n": "CRC Algemesí", "t": "salud", "tipo": "Médico", "dir": "Carrer dels Arbres 63", "tel": "+34 696 955 710"}, {"n": "Cafetería La Placeta", "t": "comer", "tipo": "Bar", "dir": "Plaça de la Ribera 19", "tel": ""}, {"n": "El Rebujito", "t": "comer", "tipo": "Bar", "dir": "Plaça de la Ribera", "tel": ""}, {"n": "Muntatges Elèctricas Girbés S.L.", "t": "tienda", "tipo": "Electrical", "dir": "Carrer dels Arbres 76", "tel": "+34 962 420 501"}, {"n": "Cafetería Marfil", "t": "comer", "tipo": "Bar", "dir": "Parc de Salvador Castell 47", "tel": ""}, {"n": "Stylo", "t": "tienda", "tipo": "Sewing", "dir": "Carrer de València 6", "tel": "+34 617 139 500"}, {"n": "Clary's", "t": "pelo", "tipo": "Peluquería", "dir": "Carrer dels Arbres 55", "tel": "+34 962 423 833"}, {"n": "El Clandestino", "t": "comer", "tipo": "Bar", "dir": "Parc de Salvador Castell 37", "tel": ""}, {"n": "Coaliments", "t": "tienda", "tipo": "Supermercado", "dir": "Parc de Salvador Castell 41", "tel": ""}, {"n": "Julián Algemesí", "t": "comer", "tipo": "Bar", "dir": "Avenida del País Valenciano 3", "tel": ""}, {"n": "Mr. Coach", "t": "deporte", "tipo": "Deporte", "dir": "", "tel": ""}, {"n": "Restaurante Gran Muralla", "t": "comer", "tipo": "Restaurante", "dir": "", "tel": ""}, {"n": "Joaquin Machi Ferris, S.L Servicios Agricolas", "t": "tienda", "tipo": "Agrarian", "dir": "", "tel": ""}, {"n": "Bicicletes Germán Puchades", "t": "tienda", "tipo": "Bicycle", "dir": "Plaça de la Mare de Déu dels Dolors 9", "tel": "+34962 42 09 72"}, {"n": "Saltoki", "t": "tienda", "tipo": "Doityourself", "dir": "", "tel": ""}, {"n": "Republik Burger", "t": "comer", "tipo": "Restaurante", "dir": "", "tel": ""}, {"n": "La Mia Mamma", "t": "comer", "tipo": "Restaurante", "dir": "", "tel": "+34962415605"}, {"n": "Carrefour", "t": "tienda", "tipo": "Supermercado", "dir": "Avinguda de la Dignitat Humana 2", "tel": "+34 914 908 900"}, {"n": "Lidl", "t": "tienda", "tipo": "Supermercado", "dir": "", "tel": ""}, {"n": "Hyundai", "t": "taller", "tipo": "Taller mecánico", "dir": "", "tel": ""}, {"n": "Renault", "t": "taller", "tipo": "Taller mecánico", "dir": "", "tel": ""}, {"n": "Seat", "t": "taller", "tipo": "Taller mecánico", "dir": "", "tel": ""}, {"n": "Audi", "t": "taller", "tipo": "Taller mecánico", "dir": "", "tel": ""}, {"n": "Brico Dépôt", "t": "tienda", "tipo": "Doityourself", "dir": "Avinguda de la Llibertat 1", "tel": "+34 962 22 99 99"}, {"n": "Simmer Cocinas", "t": "tienda", "tipo": "Kitchen", "dir": "Ronda dels Tintorers 6", "tel": "+34685950916"}, {"n": "La Constructora", "t": "tienda", "tipo": "Doityourself", "dir": "Carrer del Doctor Vicent Segura 4", "tel": "+34 96 240 37 13"}, {"n": "Comarket Alzira", "t": "tienda", "tipo": "Supermercado", "dir": "Avinguda Alcalde Francisco Blasco 7", "tel": "+34 961 11 25 80"}, {"n": "ALDI", "t": "tienda", "tipo": "Supermercado", "dir": "", "tel": ""}, {"n": "Talleres Ferauto", "t": "tienda", "tipo": "Repair", "dir": "Ronda dels Tintorers 2", "tel": "+34962401087"}, {"n": "Moeve", "t": "tienda", "tipo": "Supermercado", "dir": "", "tel": ""}, {"n": "Masymas basic", "t": "tienda", "tipo": "Supermercado", "dir": "Carrer dels Arbres 66", "tel": ""}];
+const FEAT = ["Miranda's Resto-Bar", "Trencadís Restaurante"];
+function esc(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function telHref(t){ let d = t.replace(/[^+\d]/g, ""); if(d && !d.startsWith("+")) d = "+34" + d; return "tel:" + d; }
 function getRevs(id){ try { return JSON.parse(localStorage.getItem("rev_"+id) || "[]"); } catch(e){ return []; } }
 let f = "todos";
 function render(){
   const q = document.getElementById("q").value.toLowerCase();
   let r = S.filter(s => (f==="todos" || s.t===f) && (s.n.toLowerCase().includes(q) || s.tipo.toLowerCase().includes(q)));
-  r = r.slice().sort((a,b) => b.nota - a.nota);
-  document.getElementById("list").innerHTML = r.map((s,i) => {
-    const revs = getRevs(s.id);
-    return `<div class="card"><img src="${s.img}" alt="${esc(s.n)}" loading="lazy">
-    <div class="body"><span class="rank">#${i+1}</span>
-    <h2>${esc(s.n)}</h2>
-    <div class="stars">${stars(s.nota)} <small>${s.nota.toFixed(1)} · ${s.nrev + revs.length} opiniones*</small></div>
-    <div class="meta">${esc(s.tipo)}${s.dir?` · 📍 ${esc(s.dir)}`:""}</div>
-    ${s.d?`<div class="meta">${esc(s.d)}</div>`:""}
-    <div class="actions">${s.tel?`<a class="b-call" href="tel:${s.tel}">📞 ${s.telt}</a>`:`"}
-    <button class="b-op" onclick="document.getElementById('f_${s.id}').scrollIntoView({behavior:'smooth',block:'center'})">✍️ Opinar</button></div>
+  r = r.slice().sort((a,b) => (FEAT.includes(b.n)-FEAT.includes(a.n)) || a.n.localeCompare(b.n,"es"));
+  document.getElementById("count").textContent = r.length + " negocios";
+  document.getElementById("list").innerHTML = r.map(s => {
+    const id = s.n; const revs = getRevs(id); const dest = FEAT.includes(s.n);
+    return `<div class="card${dest?" dest":""}"><h2>${esc(s.n)}</h2><span class="tipo">${esc(s.tipo)}</span>${dest?`<span class="star">⭐ Destacado</span>`:""}
+    ${s.dir?`<div class="meta">📍 ${esc(s.dir)}, Algemesí</div>`:""}
+    <div class="ops">${revs.length ? "💬 " + revs.length + " opiniones" : "Nuevo · ¡sé el primero en opinar!"}</div>
+    <div class="actions">${s.tel?`<a class="b-call" href="${telHref(s.tel)}">📞 ${esc(s.tel)}</a>`:""}
+    <button class="b-op" onclick="document.getElementById('f_${esc(s.n)}').scrollIntoView({behavior:'smooth',block:'center'})">✍️ Opinar</button></div>
     <div class="revs">${revs.map(v=>`<div class="rev"><b>${esc(v.n)} · ${"★".repeat(v.s)}</b>${esc(v.t)}</div>`).join("")}</div>
-    <div class="revform" id="f_${s.id}">
-      <input id="n_${s.id}" placeholder="Tu nombre">
-      <select id="s_${s.id}"><option value="5">★★★★★ (5)</option><option value="4">★★★★ (4)</option><option value="3">★★★ (3)</option><option value="2">★★ (2)</option><option value="1">★ (1)</option></select>
-      <textarea id="t_${s.id}" rows="2" placeholder="¿Qué te pareció?"></textarea>
-      <button onclick="opinar('${s.id}')">Publicar opinión</button>
-    </div></div></div>`;
+    <div class="revform" id="f_${esc(s.n)}">
+      <input id="n_${esc(s.n)}" placeholder="Tu nombre">
+      <select id="s_${esc(s.n)}"><option value="5">★★★★★ (5)</option><option value="4">★★★★ (4)</option><option value="3">★★★ (3)</option><option value="2">★★ (2)</option><option value="1">★ (1)</option></select>
+      <textarea id="t_${esc(s.n)}" rows="2" placeholder="¿Qué te pareció?"></textarea>
+      <button onclick="opinar('${esc(s.n).replace(/'/g,"\'")}')">Publicar opinión</button>
+    </div></div>`;
   }).join("");
 }
 function opinar(id){
-  const n = document.getElementById("n_"+id).value.trim() || "Anónimo";
-  const s = parseInt(document.getElementById("s_"+id).value);
-  const t = document.getElementById("t_"+id).value.trim();
+  const g = x => document.getElementById(x+"_"+id);
+  const n = g("n").value.trim() || "Anónimo";
+  const s = parseInt(g("s").value);
+  const t = g("t").value.trim();
   if(!t){ alert("Escribe tu opinión primero 🙂"); return; }
   const revs = getRevs(id); revs.unshift({n:n, s:s, t:t});
   localStorage.setItem("rev_"+id, JSON.stringify(revs));
@@ -144,6 +108,5 @@ document.querySelectorAll("#chips button").forEach(b => b.addEventListener("clic
 }));
 render();
 </script>
-
 </body>
 </html>
