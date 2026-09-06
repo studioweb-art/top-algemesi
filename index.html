@@ -94,7 +94,7 @@ const CATMAP = {"Restaurante":"comer","Bar":"comer","Cafetería":"comer","Comida
 "Agencia de viajes":"viajes","Fotógrafo":"foto","Veterinario":"vete","Floristería":"flor","Deporte":"deporte"};
 function catDe(s){ return CATMAP[s.tipo] || "serv"; }
 const ICOMAP = {"comer":"🍽️","pelo":"💇","taller":"🔧","farmacia":"💊","clinica":"⚕️","supers":"🛒","moda":"👗","tecno":"📱","optica":"👓","tatu":"🎨","hogar":"🏠","cultura":"📚","viajes":"✈️","foto":"📸","vete":"🐾","flor":"🌸","serv":"🛠️","deporte":"🏋️"};
-function icoDe(s){ return ICOMAP[catDe(s)] || "🏪"; }
+function icoDe(s){ const NI = {"Azares":"🎰"}; return NI[s.n] || ICOMAP[catDe(s)] || "🏪"; }
 function render(){
   const q = document.getElementById("q").value.toLowerCase();
   let r = S.filter(s => (f==="todos" || catDe(s)===f) && (s.n.toLowerCase().includes(q) || s.tipo.toLowerCase().includes(q)));
