@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TOP Algemesí · Dónde comer</title>
+<style>
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:-apple-system, 'Segoe UI', Roboto, Arial, sans-serif; background:#f2f2f2; color:#1c1c1c; }
+  .topbar { background:#000; color:#fff; padding:12px 16px; display:flex; align-items:center; gap:10px; position:sticky; top:0; z-index:20; }
+  .topbar .logo { font-weight:800; font-size:20px; }
+  .topbar .logo span { color:#00aa6c; }
+  .topbar input { flex:1; padding:9px 12px; border-radius:20px; border:none; font-size:14px; }
+  .hero { background:linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1400&q=70'); background-size:cover; background-position:center; color:#fff; padding:44px 20px; text-align:center; }
+  .hero h1 { font-size:30px; margin-bottom:6px; }
+  .hero p { font-size:15px; opacity:.9; }
+  .wrap { max-width:760px; margin:0 auto; padding:14px 14px 30px; }
+  .chips { display:flex; gap:8px; flex-wrap:wrap; margin:4px 0 12px; }
+  .chips button { padding:8px 15px; border-radius:20px; border:1px solid #ccc; background:#fff; font-size:14px; cursor:pointer; }
+  .chips button.on { background:#000; color:#fff; border-color:#000; }
+  .card { background:#fff; border-radius:14px; overflow:hidden; margin-bottom:14px; box-shadow:0 2px 8px rgba(0,0,0,.08); }
+  .card img { width:100%; height:170px; object-fit:cover; display:block; }
+  .card .body { padding:14px 16px 16px; }
+  .rank { display:inline-block; background:#000; color:#fff; font-size:12px; font-weight:800; border-radius:8px; padding:3px 9px; margin-bottom:6px; }
+  .card h2 { font-size:20px; }
+  .stars { color:#00aa6c; font-size:16px; letter-spacing:2px; margin:4px 0; }
+  .stars small { color:#666; letter-spacing:0; font-size:13px; }
+  .meta { font-size:13px; color:#666; margin:2px 0; }
+  .actions { display:flex; gap:8px; margin-top:10px; }
+  .actions a, .actions button { flex:1; text-align:center; padding:11px; border-radius:10px; font-size:14px; font-weight:700; text-decoration:none; cursor:pointer; border:none; }
+  .b-call { background:#00aa6c; color:#fff; }
+  .b-op { background:#f2f2f2; color:#000; }
+  .revs { margin-top:10px; border-top:1px solid #eee; padding-top:8px; }
+  .revs .rev { font-size:13px; background:#f7f7f7; border-radius:8px; padding:8px 10px; margin:6px 0; }
+  .revs .rev b { display:block; font-size:12px; }
+  .revform { display:flex; flex-direction:column; gap:6px; margin-top:8px; }
+  .revform input, .revform select, .revform textarea { padding:9px; border:1px solid #ddd; border-radius:8px; font-size:14px; font-family:inherit; }
+  .revform button { background:#000; color:#fff; padding:10px; border-radius:8px; font-weight:700; cursor:pointer; border:none; }
+  footer { text-align:center; padding:18px; color:#999; font-size:12px; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">TOP<span>Algemesí</span></div>
+  <input id="q" type="search" placeholder="Buscar restaurante...">
+</div>
+
+<div class="hero">
+  <h1>Dónde comer en Algemesí</h1>
+  <p>El ranking con opiniones de la gente del pueblo</p>
+</div>
+
+<div class="wrap">
+  <div class="chips" id="chips">
+    <button data-t="todos" class="on">Todos</button>
+    <button data-t="restaurante">Restaurantes</button>
+    <button data-t="bar">Bares</button>
+    <button data-t="chino">Chino</button>
+    <button data-t="italiano">Italiano</button>
+    <button data-t="asador">Asador</button>
+  </div>
+  <div id="list"></div>
+  <p style="font-size:12px;color:#999;text-align:center;">* Notas y opiniones de muestra. Datos reales de direcciones y teléfonos.</p>
+</div>
+
+<footer>TOP Algemesí · muestra de demostración</footer>
+
+<script>
+const IMG = {
+  a:"https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=60",
+  b:"https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=60",
+  c:"https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=60",
+  d:"https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=800&q=60"
+};
+const S = [
+  {id:"xopera", n:"Asador La Xopera", t:"asador", tipo:"Asador · Brasas", img:IMG.a, nota:4.6, nrev:84, dir:"Algemesí", tel:"", d:"Carnes a la brasa."},
+  {id:"mirandas", n:"Miranda's Resto-Bar", t:"bar", tipo:"Resto-Bar", img:IMG.b, nota:4.5, nrev:132, dir:"C/ Molí de la Vila 37", tel:"+34960196909", telt:"960 196 909", d:"Almuerzos Lun-Dom · Cenas Jue-Sáb."},
+  {id:"encant", n:"L'Encant Bar i Restaurant", t:"restaurante", tipo:"Restaurante", img:IMG.c, nota:4.4, nrev:97, dir:"C/ Sant Nicolau de Bari 10", tel:"+34663114311", telt:"663 114 311", d:"Menú del día económico."},
+  {id:"trencadis", n:"Trencadís Restaurante", t:"restaurante", tipo:"Restaurante", img:IMG.d, nota:4.3, nrev:61, dir:"C/ Mossén Blanch 16", tel:"+34962424364", telt:"962 424 364", d:"Menú diario 16,90 € · Fin de semana 25,90 €."},
+  {id:"oliverio", n:"Casa Oliverio", t:"restaurante", tipo:"Restaurante", img:IMG.a, nota:4.2, dir:"C/ Vall d'Albaida 19", tel:"+34675042789", telt:"675 042 789", nrev:45, d:"Cocina casera."},
+  {id:"muralla", n:"Restaurante Gran Muralla", t:"chino", tipo:"Chino", img:IMG.c, nota:4.1, nrev:58, dir:"C/ Valencia 194", tel:"+34962481052", telt:"962 481 052", d:"Comida china."},
+  {id:"ciao", n:"Ristorante Ciao Bella", t:"italiano", tipo:"Italiano", img:IMG.b, nota:4.0, nrev:39, dir:"Algemesí", tel:"", d:"Pizzas y pastas."}
+];
+function esc(s){ return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function stars(n){ let s=""; for(let i=1;i<=5;i++) s += i<=Math.round(n) ? "●" : "○"; return s; }
+function getRevs(id){ try { return JSON.parse(localStorage.getItem("rev_"+id) || "[]"); } catch(e){ return []; } }
+let f = "todos";
+function render(){
+  const q = document.getElementById("q").value.toLowerCase();
+  let r = S.filter(s => (f==="todos" || s.t===f) && s.n.toLowerCase().includes(q));
+  r = r.slice().sort((a,b) => b.nota - a.nota);
+  document.getElementById("list").innerHTML = r.map((s,i) => {
+    const revs = getRevs(s.id);
+    return `<div class="card"><img src="${s.img}" alt="${esc(s.n)}" loading="lazy">
+    <div class="body"><span class="rank">#${i+1} en Algemesí</span>
+    <h2>${esc(s.n)}</h2>
+    <div class="stars">${stars(s.nota)} <small>${s.nota.toFixed(1)} · ${s.nrev + revs.length} opiniones*</small></div>
+    <div class="meta">${s.tipo} · 📍 ${esc(s.dir)}</div>
+    <div class="meta">${esc(s.d)}</div>
+    <div class="actions">${s.tel?`<a class="b-call" href="tel:${s.tel}">📞 ${s.telt}</a>`:`"}
+    <button class="b-op" onclick="document.getElementById('f_${s.id}').scrollIntoView({behavior:'smooth',block:'center'})">✍️ Opinar</button></div>
+    <div class="revs" id="revs_${s.id}">${revs.map(v=>`<div class="rev"><b>${esc(v.n)} · ${"★".repeat(v.s)}</b>${esc(v.t)}</div>`).join("")}</div>
+    <div class="revform" id="f_${s.id}">
+      <input id="n_${s.id}" placeholder="Tu nombre">
+      <select id="s_${s.id}"><option value="5">★★★★★ (5)</option><option value="4">★★★★ (4)</option><option value="3">★★★ (3)</option><option value="2">★★ (2)</option><option value="1">★ (1)</option></select>
+      <textarea id="t_${s.id}" rows="2" placeholder="¿Qué te pareció?"></textarea>
+      <button onclick="opinar('${s.id}')">Publicar opinión</button>
+    </div></div></div>`;
+  }).join("");
+}
+function opinar(id){
+  const n = document.getElementById("n_"+id).value.trim() || "Anónimo";
+  const s = parseInt(document.getElementById("s_"+id).value);
+  const t = document.getElementById("t_"+id).value.trim();
+  if(!t){ alert("Escribe tu opinión primero 🙂"); return; }
+  const revs = getRevs(id); revs.unshift({n:n, s:s, t:t});
+  localStorage.setItem("rev_"+id, JSON.stringify(revs));
+  render();
+}
+document.getElementById("q").addEventListener("input", render);
+document.querySelectorAll("#chips button").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll("#chips button").forEach(x => x.classList.remove("on"));
+  b.classList.add("on"); f = b.dataset.t; render();
+}));
+render();
+</script>
+
+</body>
+</html>
