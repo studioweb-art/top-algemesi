@@ -55,9 +55,20 @@
     <button data-t="comer">🍽️ Comer</button>
     <button data-t="pelo">💇 Peluquerías</button>
     <button data-t="taller">🔧 Talleres</button>
-    <button data-t="serv">🛠️ Servicios</button>
-    <button data-t="salud">💊 Salud</button>
-    <button data-t="tienda">🛒 Tiendas</button>
+    <button data-t="farmacia">💊 Farmacias</button>
+    <button data-t="clinica">⚕️ Clínicas</button>
+    <button data-t="supers">🛒 Supers y comida</button>
+    <button data-t="moda">👗 Moda y belleza</button>
+    <button data-t="tecno">📱 Tecnología</button>
+    <button data-t="optica">👓 Ópticas</button>
+    <button data-t="tatu">🎨 Tatuajes</button>
+    <button data-t="hogar">🏠 Hogar</button>
+    <button data-t="cultura">📚 Cultura y ocio</button>
+    <button data-t="viajes">✈️ Viajes</button>
+    <button data-t="foto">📸 Fotógrafos</button>
+    <button data-t="vete">🐾 Veterinario</button>
+    <button data-t="flor">🌸 Floristerías</button>
+    <button data-t="serv">🛠️ Otros servicios</button>
     <button data-t="deporte">🏋️ Deporte</button>
   </div>
   <div id="list"></div>
@@ -70,9 +81,19 @@ function esc(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;")
 function telHref(t){ let d = t.replace(/[^+\d]/g, ""); if(d && !d.startsWith("+")) d = "+34" + d; return "tel:" + d; }
 function getRevs(id){ try { return JSON.parse(localStorage.getItem("rev_"+id) || "[]"); } catch(e){ return []; } }
 let f = "todos";
+const CATMAP = {"Restaurante":"comer","Bar":"comer","Cafetería":"comer","Comida rápida":"comer",
+"Peluquería":"pelo","Taller mecánico":"taller","Farmacia":"farmacia","Dentista":"clinica","Médico":"clinica",
+"Supermercado":"supers","Frutería":"supers","Horno":"supers","Pastelería":"supers","Quiosco":"supers",
+"Ropa":"moda","Zapatería":"moda","Bolsos":"moda","Belleza":"moda","Perfumería":"moda",
+"Informática":"tecno","Telefonía":"tecno","Electrónica":"tecno","Cartuchos":"tecno",
+"Óptica":"optica","Tatuajes":"tatu",
+"Muebles":"hogar","Electrodomésticos":"hogar","Ferretería":"hogar","Pinturas":"hogar","Hogar":"hogar","Electricidad":"hogar",
+"Libros":"cultura","Papelería":"cultura","Lotería":"cultura","Apuestas":"cultura",
+"Agencia de viajes":"viajes","Fotógrafo":"foto","Veterinario":"vete","Floristería":"flor","Deporte":"deporte"};
+function catDe(s){ return CATMAP[s.tipo] || "serv"; }
 function render(){
   const q = document.getElementById("q").value.toLowerCase();
-  let r = S.filter(s => (f==="todos" || s.t===f) && (s.n.toLowerCase().includes(q) || s.tipo.toLowerCase().includes(q)));
+  let r = S.filter(s => (f==="todos" || catDe(s)===f) && (s.n.toLowerCase().includes(q) || s.tipo.toLowerCase().includes(q)));
   r = r.slice().sort((a,b) => (FEAT.includes(b.n)-FEAT.includes(a.n)) || a.n.localeCompare(b.n,"es"));
   document.getElementById("count").textContent = r.length + " negocios";
   document.getElementById("list").innerHTML = r.map(s => {
